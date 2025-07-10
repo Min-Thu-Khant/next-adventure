@@ -1,15 +1,17 @@
 "use client"
-import { Move, MoveHistory } from "@/components/MoveHistory";
+import { MoveHistory } from "@/components/MoveHistory";
 import Room from "@/components/Room";
-import { Directions, Rooms, rooms } from "@/data/rooms";
+import { Directions, rooms } from "@/data/rooms";
 import useProfileStore from "@/store/profile";
-import { KeyboardEvent, useEffect } from "react";
+import { useEffect, useState } from "react";
 import CurrentStatus from "@/components/CurrentStatus";
 import { toast } from "sonner";
-
+import { getAll, move } from "@/templates/game/actions";
+import { dummyJSONWithAuth } from "@/api";
+import { callme } from "@/templates/game/actions";
 export default function Game() {
     const { current_room, setCurrentRoom, inventory, item_found, setFoundItem } = useProfileStore()
-    const moves: Move[] = []
+    const [moves, setMoves] = useState([]) 
 
     const walk = (direction: Directions) => {
         // find current room object
@@ -22,10 +24,22 @@ export default function Game() {
             toast.error("You cannot go " + direction)
         } else {
             setCurrentRoom(next_room.room)
+            move({
+                pre_room: current_room,
+                next_room: next_room.room,
+                bag: inventory
+            }).then(() => getAllMoves())
         }
     }
 
-    
+    const getAllMoves = async () => {
+         const result = await getAll()
+        setMoves(result)
+
+    }
+    useEffect(()=> {
+        getAllMoves()
+    }, [])
     useEffect(() => {
         const room = rooms.find((r) => r.name ==  current_room)
         setFoundItem(room?.item)
@@ -77,6 +91,7 @@ export default function Game() {
                 inventory={inventory} 
                 item_found={item_found}
                 />
+                <button onClick={callme}>Call Dummy</button>
         </div>
     )
 }

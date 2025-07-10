@@ -1,11 +1,5 @@
+import { Move } from "@/api/moves/types";
 import { ScrollArea } from "@/components/ui/scroll-area";
-
-export type Move  = {
-  id: number;
-  timestamp: string;
-  action: string;
-  room: string;
-}
 
 type MoveHistoryProps = {
   moves: Move[];
@@ -30,15 +24,14 @@ export const MoveHistory = ({ moves }: MoveHistoryProps) => {
               >
                 <div className="flex justify-between items-start mb-1">
                   <span className="text-sm font-medium text-slate-800">
-                    {move.action}
-                  </span>
-                  <span className="text-xs text-slate-500">
-                    {move.timestamp}
+                    Previous Room : {move.pre_room}
                   </span>
                 </div>
                 <p className="text-xs text-slate-600">
-                  Location: {move.room}
+                  Next Room: {move.next_room}
                 </p>
+                <div>Inventory</div>
+                { move.bag.join(", ")}
               </div>
             ))
           )}
