@@ -8,6 +8,7 @@ type roomInfo = {
     item?: Items | null,
 }
 export default function Room( { name, item, currentRoom } : roomInfo) {
+
     return (
         <Button
             className={ cn(`h-20 w-full flex flex-col items-center justify-center text-xs font-medium transition-all `,  currentRoom == name ? 'border-6  border-emerald-600': '' )}

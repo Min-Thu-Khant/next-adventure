@@ -50,6 +50,7 @@ export const rooms =[
             item: Items.PORTION, 
             available_rooms: [ 
                 { room: Rooms.STUDY_ROOM , direction: Directions.DOWN},
+                { room: Rooms.DINNING_ROOOM , direction: Directions.LEFT},
             ], 
             isDark: false 
         },

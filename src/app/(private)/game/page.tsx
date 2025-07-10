@@ -1,19 +1,19 @@
 "use client"
 import { Move, MoveHistory } from "@/components/MoveHistory";
 import Room from "@/components/Room";
-import { Directions, rooms } from "@/data/rooms";
+import { Directions, Rooms, rooms } from "@/data/rooms";
 import useProfileStore from "@/store/profile";
 import { KeyboardEvent, useEffect } from "react";
+import CurrentStatus from "@/components/CurrentStatus";
 import { toast } from "sonner";
 
 export default function Game() {
-    const { current_room, setCurrentRoom } = useProfileStore()
+    const { current_room, setCurrentRoom, inventory, item_found, setFoundItem } = useProfileStore()
     const moves: Move[] = []
 
     const walk = (direction: Directions) => {
         // find current room object
-        const current = rooms.find((r) => r.name == current_room)
-        console.log(current_room, current)
+        const current = rooms.find((r) => r.name == current_room)   
 
         //check availabe room with pressed direction
 
@@ -27,6 +27,8 @@ export default function Game() {
 
     
     useEffect(() => {
+        const room = rooms.find((r) => r.name ==  current_room)
+        setFoundItem(room?.item)
         const handleKeyDown = (e: WindowEventMap["keydown"]) => {
         // console.log(e)
         switch (e.key) {
@@ -70,6 +72,11 @@ export default function Game() {
                     <MoveHistory moves={moves} />
                 </div>
             </div>
+            <CurrentStatus 
+                current_room={current_room} 
+                inventory={inventory} 
+                item_found={item_found}
+                />
         </div>
     )
 }
