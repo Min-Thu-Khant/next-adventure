@@ -26,7 +26,6 @@ import {
 import {
     Input
 } from "@/components/ui/input"
-
 const formSchema = z.object({
     username: z.string().min(1),
     password: z.string().min(1)
@@ -34,6 +33,8 @@ const formSchema = z.object({
 
 import useProfileStore from "@/store/profile"
 import { useRouter } from "next/navigation"
+import { authenticate } from "./actions"
+import { signIn } from "next-auth/react"
 
 export default function LoginForm() {
     const router = useRouter()
@@ -41,14 +42,19 @@ export default function LoginForm() {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            username: "",
-            password: ""
+            username: "emilys",
+            password: "emilyspass"
         }
     })
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        try {
-            console.log(values);
+
+    async function onSubmit(values: z.infer<typeof formSchema>) {
+        try {   
+            await signIn('credentials', { username: values.username, password: values.password, redirect: false})
+
+            // const result = await authenticate(values.username, values.password);
+            // console.log(result)
+            // console.log(values);
             setUsename(values.username)
             router.replace("/game")
             toast.success("success")

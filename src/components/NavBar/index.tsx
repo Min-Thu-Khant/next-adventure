@@ -3,16 +3,19 @@ import { Package, LogOut, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import useProfileStore from "@/store/profile";
 import { useRouter } from "next/navigation";
+import { signOut, useSession } from "next-auth/react";
 
 
 
 export const Navbar = () => {
     const { username, inventory, clearStore } = useProfileStore()
+    const { data } = useSession()
     const router = useRouter()
-    const logout = () => {
+    const logout = async () => {
         //clear store
+        await signOut()
         clearStore()
-        router.replace("/")
+        router.replace("/login")
         //nav to login page
     }
   return (
@@ -22,7 +25,7 @@ export const Navbar = () => {
         
         <div className="flex items-center space-x-2 bg-slate-700 px-3 py-2 rounded-lg">
           <User className="h-4 w-4 text-blue-400" />
-          <span className="text-sm font-medium">{username}</span>
+          <span className="text-sm font-medium">{data?.user.username}</span>
         </div>
       </div>
 
