@@ -13,5 +13,5 @@ export const getAll = async () => {
 }
 
 export const callme = async () => {
-     me()
+     return (await me()).data;
 }
